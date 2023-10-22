@@ -1,0 +1,3 @@
+bucket = var.bucket_name
+prefix = "static.tfstate.d"
+impersonate_service_account = "sa-iti-tf-dev@testingsevices.iam.gserviceaccount.com"
