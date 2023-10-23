@@ -8,13 +8,13 @@ variable "private_subnets_cidr_blocks" {
   type        = list(string)
 }
 
-variable "subnets_names" {
-  type        = list(string)
+variable "management-subnet-name" {
+#   type        = list(string)
 }
 
-variable "availability_zones" {
-  type        = list(string)
-}
+# variable "availability_zones" {
+#   type        = list(string)
+# }
 
 variable "protocol" {}
 variable "developer-service-account-id" {}

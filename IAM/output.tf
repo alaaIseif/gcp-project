@@ -1,11 +1,11 @@
 output "sa-developer-email" {
-  value = google_service_account.developer-vm.email
+  value = google_service_account.developer.email
 }
 
 output "developer-service-account-id" {
-  value = google_service_account.developer-vm.account_id
+  value = google_service_account.developer.account_id
 }
 
-# output "developer-custom-role" {
-#   value = module.IAM.google_project_iam_custom_role.developer-role
-# }
+output "developer-key" {
+  value = google_service_account_key.developer-key.name
+}

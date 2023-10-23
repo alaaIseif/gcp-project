@@ -1,58 +1,69 @@
-#########################
-## GCP Linux VM - Main ##
-#########################
+data "google_project" "current" {}
 
-# resource "google_compute_address" "static_ip" {
-#   name = "ubuntu-vm"
+# data "google_artifact_registry_repository" "my_repository" {
+#   project        = data.google_project.current.project_id
+#   location       = "us-east1"  
+#   repository_id  = var.repository_id
+#   depends_on = [ "${var.my_repository}" ]
 # }
 
-# Bootstrapping Script to Install Apache
-data "template_file" "linux-metadata" {
-template = <<EOF
-sudo apt-get update; 
-sudo apt-get install -yq build-essential apache2;
-sudo systemctl start apache2;
-sudo systemctl enable apache2;
-EOF
-}
 
-# Create VM
 resource "google_compute_instance" "vm_instance" {
-  name         = "${var.management-region}-vm"
-  zone         = var.management-region
+  name         = "main-vpc"
   machine_type = var.linux_instance_type
   tags         = ["allow-ssh"] // this receives the firewall rule
+  zone = "us-east1-b"
 
-    boot_disk {
+
+  boot_disk {
     initialize_params {
-        image = var.ubuntu_2004_sku
+      image = "ubuntu-os-cloud/ubuntu-2004-lts"
     }
-    }
+  }
+#   service_account {
+#         email  = var.service-account-email
+#         scopes = ["userinfo-email", "compute-ro"]
+#   }
 
-    provisioner "remote-exec" {
-    inline = [
-        "sudo apt-get update",
-        "sudo apt-get install -y docker.io"
-    ]
-    }
-
-    service_account {
-        email  = var.service-account-email
-        scopes = ["userinfo-email", "compute-ro"]
-    }
-    
-    network_interface {
+   network_interface {
     network = var.network-interface
-    }
-    
-    metadata = {
-        enable-os-login = "true"
+    subnetwork = var.subnetwork
+    access_config {
+        nat_ip = var.nat-ip
+        } 
     }
 
-    # access_config {
-    # nat_ip = google_compute_address.static_ip.address
-    # } 
-   
-    # metadata_startup_script = data.template_file.linux-metadata.rendered
+  metadata =  {
+    enable-oslogin = "TRUE"
+  }
+  
+  metadata_startup_script = <<-EOT
+    #!/bin/bash
+    echo "Instance provisioned!"
 
+   sudo apt update //installing Docker
+   sudo apt install apt-transport-https ca-certificates curl software-properties-common
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+   sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+   sudo apt install docker-ce
+   sudo usermod -aG docker ubuntu
+   su - ubuntu
+   docker
+  EOT
+
+  connection {
+    host = self.network_interface[0].access_config[0].nat_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'Hello, world!'",
+      "gcloud auth activate-service-account --key-file=${var.developer-key}",
+      "gcloud auth configure-docker",
+      "docker pull gcr.io/${data.google_project.current.project_id}/nodejs-image:latest",
+  
+      "docker tag gcr.io/${data.google_project.current.project_id}/nodejs-image:latest ${var.management-region}-docker.pkg.dev/${data.google_project.current.project_id}/${var.my_repository.name}/nodejs-image:latest",
+      "docker push ${var.management-region}-docker.pkg.dev/${data.google_project.current.project_id}/${var.my_repository.name}/nodejs-image:latest",
+    ]
+  }
 }

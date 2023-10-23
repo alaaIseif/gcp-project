@@ -1,5 +1,12 @@
 variable "management-region" {}
+variable "management-zone" {}
 variable "linux_instance_type" {}
 variable "ubuntu_2004_sku" {}
-variable "service-account-email" {}
+variable "sa-developer-email" {}
 variable "network-interface" {}
+variable "subnetwork" {}
+variable "nat-ip" {}
+variable "project_id" {}
+variable "repository_id" {}
+variable "my_repository" {}
+variable "developer-key" {}

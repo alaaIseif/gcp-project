@@ -6,9 +6,9 @@ output "vm-name" {
   value = google_compute_instance.vm_instance.name
 }
 
-output "vm-service-account" {
-  value = google_compute_instance.vm_instance.service_account
-}
+# output "vm-service-account" {
+#   value = google_compute_instance.vm_instance.service_account
+# }
 
 
 # output "vm-external-ip" {
