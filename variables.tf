@@ -6,9 +6,9 @@ variable "management-region" {}
 variable "private_subnets_cidr_blocks" {
   type        = list(string)
 }
-# variable "availability_zones" {
-#   type        = list(string)
-# }
+variable "availability_zones" {
+  type        = list(string)
+}
 variable "protocol" {}
 variable "management-subnet-name" {
 #   type        = list(string)
@@ -20,11 +20,10 @@ variable "bucket_name" {}
 variable "storage_location" {}
 variable "project_id" {}
 
-#############
+############# VM #############3
 
 variable "linux_instance_type" {}
 variable "ubuntu_2004_sku" {}
-#############
 
 variable "repository_id" {}
 variable "format" {}
@@ -37,27 +36,38 @@ variable "network-interface" {
 variable "subnetwork" {
     default = ""
 }
-
-# variable "vm-service-account" { 
-#     default = ""
-# }
-
 variable "nat-ip" {    
     default = ""
 }
 variable "management-zone" {
     default = ""
 }
-
-
-# variable "developer-custom-role" {
-#     default = ""
-# }
 variable "my_repository" {
     default = ""
-
 }
 variable "developer-key" {
     default = ""
 }
 
+#################Workload Variables###########################
+variable "workload-subnet-name" {
+    default = ""
+}
+variable "workload-region" {
+    default = ""
+}
+variable "cluster_name" {}
+variable "sa-gke-accessor-email" {}
+
+variable "sa-gke-accessor-id" {}
+
+variable "deletion_protection" {}
+variable "enable_private_nodes" {}
+variable "gke_master_ipv4_cidr_block" {} 
+
+variable "node-pool-name" {}
+variable "node-pool-location" {}
+variable "node-pool-nodes-count" {}
+
+variable "node_machine_type" {}
+variable "node_disk_size_gb" {}

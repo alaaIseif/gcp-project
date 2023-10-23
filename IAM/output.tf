@@ -9,3 +9,9 @@ output "developer-service-account-id" {
 output "developer-key" {
   value = google_service_account_key.developer-key.name
 }
+
+
+output "gke-access-service-account-id" {
+  value = google_service_account.gke-access-sa.account_id
+}
+

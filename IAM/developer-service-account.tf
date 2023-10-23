@@ -6,9 +6,7 @@ resource "google_service_account" "developer" {
 
 resource "google_service_account_key" "developer-key" {
   service_account_id = google_service_account.developer.name
-#   public_key_type    = "TYPE_X509_PEM_FILE"
 }
 data "google_service_account_key" "developer-key" {
   name            = google_service_account_key.developer-key.name
-#   public_key_type = "TYPE_X509_PEM_FILE"
 }

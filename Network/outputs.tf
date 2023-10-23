@@ -10,7 +10,6 @@ output "nat-ip" {
   value = google_compute_address.static_ip.address
 }
 
-
-# output project-compute-service {
-#     value = google_project_service.project_service.project
-# }
+output workload-subnetwork {
+  value = google_compute_subnetwork.private-workload.name
+}

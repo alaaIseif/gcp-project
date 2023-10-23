@@ -1,13 +1,5 @@
 data "google_project" "current" {}
 
-# data "google_artifact_registry_repository" "my_repository" {
-#   project        = data.google_project.current.project_id
-#   location       = "us-east1"  
-#   repository_id  = var.repository_id
-#   depends_on = [ "${var.my_repository}" ]
-# }
-
-
 resource "google_compute_instance" "vm_instance" {
   name         = "main-vpc"
   machine_type = var.linux_instance_type
@@ -20,10 +12,10 @@ resource "google_compute_instance" "vm_instance" {
       image = "ubuntu-os-cloud/ubuntu-2004-lts"
     }
   }
-#   service_account {
-#         email  = var.service-account-email
-#         scopes = ["userinfo-email", "compute-ro"]
-#   }
+  service_account {
+        email  = var.sa-developer-email
+        scopes = ["userinfo-email", "compute-ro", "cloud-platform"]
+  }
 
    network_interface {
     network = var.network-interface
