@@ -64,16 +64,16 @@ resource "google_compute_instance" "vm_instance" {
     # "docker pull mongo:7.0-rc",
     "sudo docker pull docker.io/bitnami/mongodb:4.4.4",
 
-    "mongo -u drage -p secretpassword123 --authenticationDatabase mongodb-0.mongodb-headless.database.svc.cluster.local:27017/inventory",
+    "mongo -u mongoset -p secretpassword123 --authenticationDatabase mongodb-0.mongodb-headless.database.svc.cluster.local:27017/inventory",
     
     
     "kubectl apply -f ./mongo-k8s",
     "kubectl get service webapp-service",
     "kubectl exec -it mongodb-0 -- mongo",
-    "kubectl logs drage-79c95d6b7-bqb4q  -n database",
+    "kubectl logs mongoset-79c95d6b7-bqb4q  -n database",
     "kubectl exec -it mongodb-0  -- mongo",   #-n database   # mongo-pod
     "kubectl exec -it mongo-test-pod -n database -- /bin/bash",    # mongo-client
-    # "mongodb://drage:secretpassword123@mongo-0.mongo/test",
+    # "mongodb://mongoset:secretpassword123@mongo-0.mongo/test",
  
   
     "docker build -t ${var.management-region}-docker.pkg.dev/${data.google_project.current.project_id}/${var.repository_id}/${var.app_image_name}:${var.app_image_version} ../app",
@@ -81,7 +81,7 @@ resource "google_compute_instance" "vm_instance" {
     "docker push ${var.management-region}-docker.pkg.dev/${data.google_project.current.project_id}/${var.repository_id}/${var.app_image_name}:${var.app_image_version}",
     
     #Run the Docker container, connecting it to the MongoDB replica set:
-    "docker run -d --name node-app   --net mongo-net  -e MONGO_URI=mongodb://drage:secretpassword123@mongo-0.mongo/test?readPreference=nearest&replicaSet=rs0&authSource=admin",
+    "docker run -d --name node-app   --net mongo-net  -e MONGO_URI=mongodb://mongoset:secretpassword123@mongo-0.mongo/test?readPreference=nearest&replicaSet=rs0&authSource=admin",
     ]
   }
 }
