@@ -3,3 +3,4 @@ variable "repository_id" {}
 variable "project_id" {}
 variable "format" {}
 variable "bucket_name" {}
+variable "management-region" {}

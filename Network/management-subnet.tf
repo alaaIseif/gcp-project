@@ -5,8 +5,3 @@ resource "google_compute_subnetwork" "private-management" {
   purpose       = "PRIVATE_NAT"
   region = var.region[0]
 }
-
-resource "google_project_service" "project_service" {
-  project = var.project_id
-  service = "compute.googleapis.com"
-}

@@ -22,6 +22,7 @@ resource "google_project_iam_custom_role" "developer" {
   ,"compute.networks.create"
   ,"compute.firewalls.create"
   ,"resourcemanager.projects.setIamPolicy" /*Granting, changing, and revoking access to resources*/
-  ,"resourcemanager.projects.getIamPolicy" 
+  ,"resourcemanager.projects.getIamPolicy"
+  ,"compute.osAdminLogin"
   ]
 }

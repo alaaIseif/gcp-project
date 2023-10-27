@@ -1,5 +1,5 @@
 # Configure the GCP Provider
 provider "google" {
-      project     = "testingsevices"
-  region      = "us-central1"
+    project     = "testingsevices"
+    region      = "asia-south2"
 }

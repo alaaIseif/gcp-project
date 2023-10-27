@@ -20,7 +20,18 @@ resource "google_project_iam_custom_role" "gke-access" {
 
     # Permissions for MongoDB and Node.js:
     "roles/storage.objectViewer", //Grants read-only access to Cloud Storage objects. This might be necessary if your MongoDB or Node.js images are stored in Cloud Storage buckets.
-    "roles/storage.objectCreator"
+    "roles/storage.objectCreator",
+
+    "roles/compute.instanceAdmin.v1", //(to create instances)
+    "roles/compute.diskAdmin", //(to create disks)
+    "roles/compute.networkAdmin", //(to manage subnetworks)
+    "roles/compute.securityAdmin", //(to set instance metadata)
+    "compute.instances.create",
+    "compute.disks.create",
+    "compute.subnetworks.use",
+    "compute.instances.setMetadata",
+    "compute.subnetworks.useExternalIp",
+    "compute.instanceGroups.update"
   ]
 
 }

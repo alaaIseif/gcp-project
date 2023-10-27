@@ -25,15 +25,16 @@ resource "google_compute_router_nat" "gke-nat" {
     source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
   }
 
-  nat_ips = [google_compute_address.gke-nat.self_link]
+  nat_ips = [google_compute_address.my_internal_ip_addr.self_link]
 }
 
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address
-resource "google_compute_address" "gke-nat" {
-  name         = "nat"
-  address_type = "EXTERNAL"
-  network_tier = "PREMIUM"
-  region = var.workload-region
 
-  depends_on = [google_project_service.compute]
+resource "google_compute_address" "my_internal_ip_addr" {
+  project      = var.project_id
+  address_type = "INTERNAL"
+  region       = var.workload-region
+  subnetwork   = google_compute_subnetwork.private-workload.id
+  name         = "internalip"
+  address      = "10.0.0.0/16"
+  description  = "An internal IP address for my vm"
 }

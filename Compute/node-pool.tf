@@ -1,18 +1,32 @@
-resource "google_container_node_pool" "primary_node" {
- name       = var.node-pool-name             
- location   =  var.node-pool-location                
- node_count = var.node-pool-nodes-count
+# Create managed node pool
+resource "google_container_node_pool" "primary_nodes" {
+  name       = google_container_cluster.primary.name   
+  location   = var.node-pool-location
+  cluster    = google_container_cluster.primary.name   
+  node_count = 1
 
- cluster    =  google_container_cluster.gke-cluster.name      
+    autoscaling {
+        min_node_count = 1
+        max_node_count = 3
+    }
 
- node_config {
-    machine_type = var.node_machine_type                                       
-    disk_size_gb = var.node_disk_size_gb
-    service_account = var.sa-gke-accessor-email
+    management {
+        auto_repair  = true
+        auto_upgrade = true
+    }
+
+
+  node_config {
     oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform"
+      "https://www.googleapis.com/auth/compute",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
     ]
+
+    machine_type = var.node_machine_type    
+    service_account = var.sa-gke-access-email
   }
-  
 }
+
 

@@ -24,8 +24,10 @@ variable "project_id" {}
 
 variable "linux_instance_type" {}
 variable "ubuntu_2004_sku" {}
-
+variable "vm_name" {}
 variable "repository_id" {}
+variable "app_image_name" {}
+variable "app_image_version" {}
 variable "format" {}
 variable "sa-developer-email" {}
 variable "sa-developer-id" {}
@@ -37,6 +39,9 @@ variable "subnetwork" {
     default = ""
 }
 variable "nat-ip" {    
+    default = ""
+}
+variable "network_ip" {    
     default = ""
 }
 variable "management-zone" {
@@ -57,12 +62,13 @@ variable "workload-region" {
     default = ""
 }
 variable "cluster_name" {}
-variable "sa-gke-accessor-email" {}
+variable "sa-gke-access-email" {}
 
-variable "sa-gke-accessor-id" {}
+variable "sa-gke-access-id" {}
 
 variable "deletion_protection" {}
 variable "enable_private_nodes" {}
+variable "enable_private_endpoint" {}
 variable "gke_master_ipv4_cidr_block" {} 
 
 variable "node-pool-name" {}

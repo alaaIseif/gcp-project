@@ -11,7 +11,6 @@ resource "google_compute_firewall" "iap_to_ssh" {
 
   # Cloud IAP's TCP forwarding netblock
   source_ranges = ["35.235.240.0/20"]
-#   target_tags   = ["iap-tunnel"]
   target_service_accounts = [var.developer-service-account-id]
 
 
