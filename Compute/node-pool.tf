@@ -9,24 +9,16 @@ resource "google_container_node_pool" "primary_nodes" {
         min_node_count = 1
         max_node_count = 3
     }
-
     management {
         auto_repair  = true
         auto_upgrade = true
     }
 
-
-  node_config {
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
-    ]
-
-    machine_type = var.node_machine_type    
-    service_account = var.sa-gke-access-email
-  }
+    node_config {
+        machine_type    = var.node_machine_type    
+        disk_size_gb    = 25
+        image_type      = "ubuntu_containerd"
+        service_account = var.sa-gke-access-email
+        oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
+    }
 }
-
-

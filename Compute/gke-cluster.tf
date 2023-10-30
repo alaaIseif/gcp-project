@@ -1,4 +1,3 @@
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster
 resource "google_container_cluster" "primary" {
   name                     = var.cluster_name
   location                 = var.workload-region
@@ -6,13 +5,14 @@ resource "google_container_cluster" "primary" {
   initial_node_count       = 1
   network                  = var.network-interface
   subnetwork               = var.workload-subnet-name
-  logging_service          = "logging.googleapis.com/kubernetes"
-  monitoring_service       = "monitoring.googleapis.com/kubernetes"
   networking_mode          = "VPC_NATIVE"
+  deletion_protection      = false
 
   # Optional, if you want multi-zonal cluster
   node_locations =  var.availability_zones
-
+  node_config {
+    disk_size_gb = 25
+  }
   addons_config {
     http_load_balancing {
       disabled = true
@@ -21,31 +21,19 @@ resource "google_container_cluster" "primary" {
       disabled = false
     }
   }
-
-  release_channel {
-    channel = "REGULAR"
+  workload_identity_config { //allows workloads to impersonate Identity and Access Management (IAM) service accounts to access Google Cloud services.
+    workload_pool = "${var.project_id}.svc.id.goog"
   }
-
-#   workload_identity_config {
-#     workload_pool = "devops-v4.svc.id.goog"
-#   }
-
-#   ip_allocation_policy {
-#     cluster_secondary_range_name  = "k8s-pod-range"
-#     services_secondary_range_name = "k8s-service-range"
-#   }
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block = var.workload_subnet_cidr
+    }
+  }
 
   private_cluster_config {
-    enable_private_nodes    = var.enable_private_nodes
-    enable_private_endpoint = var.enable_private_endpoint
-    master_ipv4_cidr_block  = var.gke_master_ipv4_cidr_block
+    enable_private_nodes    = var.enable_private_nodes  //the cluster's nodes will have private IP addresses instead of public IP addresses
+    enable_private_endpoint = var.enable_private_endpoint  //the cluster's master will have a public IP address.
+    master_ipv4_cidr_block  = "172.168.0.0/28"
   }
-
-  #   Jenkins use case
-  #   master_authorized_networks_config {
-  #     cidr_blocks {
-  #       cidr_block   = "10.0.0.0/18"
-  #       display_name = "private-subnet-w-jenkins"
-  #     }
-  #   }
 }
+

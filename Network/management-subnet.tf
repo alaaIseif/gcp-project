@@ -1,7 +1,7 @@
 resource "google_compute_subnetwork" "private-management" {
   name          = var.management-subnet-name
-  ip_cidr_range = var.private_subnets_cidr_blocks[0]
+  ip_cidr_range = var.management_subnet_cidr
   network       = google_compute_network.main.id
-  purpose       = "PRIVATE_NAT"
-  region = var.region[0]
+  region        = var.management-region //"asia-south2"
+  private_ip_google_access = true
 }
